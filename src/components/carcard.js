@@ -11,7 +11,7 @@ const CarCard = ({car}) => {
     const route = useRouter();
 
   return (
-    <div onClick={()=>{route.push('car-details');scrollTo(0,0)}} className="group rounded-xl overflow-hidden shadow-lg hover:-translate-y-1 transition-all duration-500 cursor-pointer">
+    <div onClick={()=>{route.push(`/car-lists/${car._id}`);scrollTo(0,0)}} className="group rounded-xl overflow-hidden shadow-lg hover:-translate-y-1 transition-all duration-500 cursor-pointer">
         <div className="relative h-40 overflow-hidden">
             <Image src= {car.image} alt="carimage" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"/>
             {car.isAvailable && <p className="absolute top-4 left-4 bg-primary/90 text-white text-xs px-2.5 py-1 rounded-full">Available Now</p>}
