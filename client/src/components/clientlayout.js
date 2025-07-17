@@ -3,6 +3,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import Login from "@/app/login/page";
 
 
 
@@ -14,6 +15,7 @@ export default function ClientLayout({ children }) {
 
   return (
     <>
+        {showLogin && <Login setShowLogin={setShowLogin}/>}
         {!isOwnerPath && <Navbar setShowLogin={setShowLogin}  />}
         {children}
         <Footer />
