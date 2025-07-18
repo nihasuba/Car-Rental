@@ -1,6 +1,7 @@
 import Navbar from "@/components/navbar";
 import "./globals.css";
 import ClientLayout from "@/components/clientlayout";
+import { AppProvider } from "@/context/AppContext";
 
 
 export const metadata = {
@@ -20,7 +21,9 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.svg" />
       </head>
       <body>
-        <ClientLayout>{children}</ClientLayout>
+        <AppProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </AppProvider>
       </body>
     </html>
   );

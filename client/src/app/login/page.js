@@ -1,19 +1,47 @@
+"use client"
 import { useState } from "react";
+import Link from "next/link";
+import axios from "axios";
+import { AppContext, useAppContext } from "@/context/AppContext";
+import { toast } from 'react-hot-toast';
 
-const Login = ({setShowLogin}) => {
+const Login = ({}) => {
 
+    const{setShowLogin,setShowRegister,axios,setToken,route,fetchUser} = useAppContext();
     const [state, setState] = useState("login");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    //const [showRegister, setShowRegister] = useState(false);
+
+
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     const onSubmitHandler = async (e) => {
-        e.preventDefault();
+        try {
+            e.preventDefault();
+            const response = await axios.post(`${apiBaseUrl}/api/user/login`, {email,password});
+            if (response.data.success === true) {
+                route.push('/')
+                console.log(response.data.token)
+                toast.success("Logged In Successfully");
+                setToken(response.data.token)
+                await fetchUser();
+                localStorage.setItem('token',response.data.token)
+                setShowLogin(false);
+                setShowRegister(false);
+            } else {
+                toast.error(response.data.message || "Login failed");
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+        
     }
 
   return (
     <div onClick={()=>setShowLogin(false)} className="fixed top-0 bottom-0 left-0 right-0 flex items-center text-sm text-gray-600 bg-black/50">
-      <form onSubmit={onSubmitHandler} onClick={(e)=>e.stopPropagation}className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] rounded-lg shadow-xl border border-gray-200 bg-white">
+      <form onSubmit={onSubmitHandler} onClick={(e)=>e.stopPropagation()}className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] rounded-lg shadow-xl border border-gray-200 bg-white">
             <p className="text-2xl font-medium m-auto">
                 <span className="text-primary">User</span> {state === "login" ? "Login" : "Sign Up"}
             </p>
@@ -36,8 +64,17 @@ const Login = ({setShowLogin}) => {
                     Already have account? <span onClick={() => setState("login")} className="text-primary cursor-pointer">click here</span>
                 </p>
             ) : (
-                <p>
-                    Create an account? <span onClick={() => setState("register")} className="text-primary cursor-pointer">click here</span>
+                <p >
+                    Create an account? {""}
+                    <span
+                        className="text-primary cursor-pointer"
+                        onClick={() => {
+                        setShowLogin(false);
+                        setShowRegister(true);
+                        }}
+                    >
+                        click here
+                    </span>
                 </p>
             )}
             <button className="bg-primary hover:bg-blue-800 transition-all text-white w-full py-2 rounded-md cursor-pointer">
