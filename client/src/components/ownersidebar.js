@@ -5,15 +5,31 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useAppContext } from '@/context/AppContext';
+import toast from 'react-hot-toast';
 
 const OwnerSidebar = () => {
-  const user = dummyUserData;
+  
   const pathname = usePathname();
   const [image, setImage] = useState('');
+  const {user, axios, fetchUser} =useAppContext();
 
   const updateImage = async () => {
-    user.image = URL.createObjectURL(image);
-    setImage('');
+    try {
+      const formData = new FormData();
+      formData.append('image', image);
+      const {data} = await axios.post('api/owner/update-image', formData);
+      if(data.success) {
+        fetchUser();
+        toast.success('Image updated successfully');
+        setImage('');
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error("Error updating image:", error);
+      
+    }
   };
 
   return (
@@ -24,6 +40,8 @@ const OwnerSidebar = () => {
           <Image
             src={image ? URL.createObjectURL(image) : user?.image || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=300"}
             alt=""
+            width={56}    
+            height={56}
             className=" h-9 md:h-14 w-9 md:w-14 rounded-full object-cover mx-auto"
           />
           <input

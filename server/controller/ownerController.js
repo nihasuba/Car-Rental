@@ -112,30 +112,37 @@ export const deleteCar = async (req, res) => {
 //API to get Dashboard Data
 export const getDashboardData = async (req, res) => {
     try {
-        const{_id,role} = req.user;
-        if(role!== "owner"){
-            return res.json({success:false, message:"You are not authorized to access this data"})
+        const { _id, role } = req.user;
+
+        if (role !== "owner") {
+            return res.json({ success: false, message: "You are not authorized to access this data" });
         }
-        const cars = await Car.find({owner:_id});
-        const bookings = await Booking.find({owner:_id}).populate("car").sort({createdAt:-1});
-        const pendingBookings = await Booking.find({owner:_id, status:"pending"});
-        const completedBookings = await Booking.find({owner:_id, status:"confirmed"})
-        const monthlyRevenue= bookings.slice().filter((booking) => {booking.status === 'confirmed'}).reduce(acc,booking => acc + booking.price, 0);
+
+        const cars = await Car.find({ owner: _id });
+        const bookings = await Booking.find({ owner: _id }).populate("car").sort({ createdAt: -1 });
+        const pendingBookings = await Booking.find({ owner: _id, status: "pending" });
+        const completedBookings = await Booking.find({ owner: _id, status: "confirmed" });
+
+        const monthlyRevenue = bookings
+            .filter(booking => booking.status === 'confirmed')
+            .reduce((acc, booking) => acc + booking.price, 0);
+
         const dashboardData = {
-            toggleCarAvailability: cars.length,
+            totalCars: cars.length,
             totalBookings: bookings.length,
             pendingBookings: pendingBookings.length,
             completedBookings: completedBookings.length,
             recentBookings: bookings.slice(0, 3),
             monthlyRevenue
-        }
-        res.json({success:true, dashboardData})
+        };
+
+        res.json({ success: true, dashboardData });
     } catch (error) {
         console.log(error);
-        return res.json({ success: false, message: error.message, error: error.stack });
-        
+        return res.json({ success: false, message: error.message });
     }
 }
+
 
 //uploadImage Api
 export const updateUserImage = async (req, res) => {

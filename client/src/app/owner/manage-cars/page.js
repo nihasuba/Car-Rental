@@ -3,17 +3,62 @@ import { assets, dummyCarData } from "@/assets/assets";
 import OwnerTitle from "@/components/ownertitle";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useAppContext } from "@/context/AppContext";
+import toast from "react-hot-toast";
 
 const ManageCarsPage = () => {
+
+
+  const {axios, currency, isOwner, route} = useAppContext();
+  
   const [cars,setCar] = useState([])
   const fetchOwnerCars = async() => {
-    setCar(dummyCarData)
+    try {
+      const {data} = await axios.get('api/owner/cars');
+      if(data.success) {
+        setCar(data.cars);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error("Error fetching cars:", error);
+    }
   }
-  useEffect(()=>{
-    fetchOwnerCars();
-  },[])
 
-  const currency= process.env.NEXT_PUBLIC_CURRENCY || "Rs.";
+  const toggleAvailability = async(carId) => {
+    try {
+      const {data} = await axios.get('api/owner/toggle-car', {carId});
+      if(data.success) {
+        toast.success(data.message);
+        fetchOwnerCars();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error("Error fetching cars:", error);
+    }
+  }
+  const deleteCar = async(carId) => {
+    try {
+      const confirm = window.confirm("Are you sure you want to delete this car?");
+      if(!confirm) return null;
+      const {data} = await axios.get('api/owner/delete-car', {carId});
+      if(data.success) {
+        toast.success(data.message);
+        fetchOwnerCars();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error("Error fetching cars:", error);
+    }
+  }
+
+  useEffect(()=>{
+    isOwner && fetchOwnerCars();
+  },[isOwner])
+
+  
   
   return (
     <div className="px-4 pt-10 md:px-1- w-full">
@@ -34,7 +79,7 @@ const ManageCarsPage = () => {
           {cars.map((car, index) => (
             <tr key={index} className="border-t border-borderColor">
               <td className="p-3 flex items-center gap-3">
-                <Image src={car.image} alt="" className="h-12 w-12 aspect-square rounded-md object-cover" />
+                <Image src={car.image} alt="" width={48} height={48} className="h-12 w-12 aspect-square rounded-md object-cover" />
                 <div className="max-md:hidden">
                   <p className="font-medium">{car.brand} {car.model}</p>
                   <p className="font-medium">{car.seating_capacity}.{car.transmission}</p>
@@ -48,7 +93,8 @@ const ManageCarsPage = () => {
                 </span>
               </td>
               <td className="flex items-center p-3">
-                <Image src={car.isAvailable ? assets.eye_close_icon : assets.eye_icon} alt="" className="cursor-pointer"/>
+                <Image  onClick= {()=>toggleAvailability(car._id)} src={car.isAvailable ? assets.eye_close_icon : assets.eye_icon} alt="" className="cursor-pointer"/>
+                <Image  onClick={()=>deleteCar(car._id)}src={assets.delete_icon} alt="" className="cursor-pointer"/>
               </td>
             </tr>
           ))}

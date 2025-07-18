@@ -3,20 +3,42 @@ import { useEffect, useState } from 'react';
 import { assets, dummyDashboardData } from '@/assets/assets';
 import OwnerTitle from '@/components/ownertitle';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
+import { useAppContext } from '@/context/AppContext';
 
 const OwnerDashboard = () => {
+
+  const {axios, currency, isOwner, route} = useAppContext();
+
   const [data, setData] = useState({
-    totalCars: 8,
-    totalBookings: 8,
-    pendingBookings: 8,
-    completedBookings: 8,
+    totalCars: 0,
+    totalBookings: 0,
+    pendingBookings: 0,
+    completedBookings: 0,
     recentBookings: [],
     monthlyRevenue: 0,
   });
 
+  const fetchDashboardData = async () => {
+    try {
+      const {data} = await axios.get('api/owner/dashboard');
+      console.log(data);
+      if(data.success) {
+        setData(data.dashboardData);
+      } else{
+        toast.error(data.message);
+      }
+    } catch (error) {
+       toast.error(error.message);
+    }
+  }
+
+
   useEffect (()=> {
-    setData(dummyDashboardData);
-  },[])
+    if(isOwner){
+        fetchDashboardData();
+    }
+  },[isOwner])
 
   const dashboardCards = [
     { title: 'Total Cars', value: data.totalCars, icon: assets.carIcon },
@@ -25,7 +47,7 @@ const OwnerDashboard = () => {
     { title: 'Completed Bookings', value: data.completedBookings, icon:assets.listIconColored },
   ];
 
-  const currency = process.env.NEXT_PUBLIC_CURRENCY || 'Rs.';
+  
 
   return (
     <div className='px-4 pt-10 md:px-10 flex-1'>

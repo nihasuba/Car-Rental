@@ -3,20 +3,45 @@ import { assets, dummyCarData, dummyMyBookingsData } from "@/assets/assets";
 import OwnerTitle from "@/components/ownertitle";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useAppContext } from "@/context/AppContext";
 
 
 const ManageBookingsPage = () => {
   
+  const {axios, currency, isOwner, route} = useAppContext();
   const [bookings, setBookings] = useState([])
+
   const fetchOwnerBooking = async() => {
-    setBookings(dummyMyBookingsData)
+    try {
+      const {data} = await axios.get('api/owner/bookings');
+      data?.success ? setBookings(data.bookings) : toast.error(data.message);
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+      toast.error("Error fetching bookings");
+    }
+  }
+
+  const changeBookingStatus = async(bookingId, status) => {
+    try {
+      const {data} = await axios.post('api/owner/change-booking-status', {bookingId, status});
+      if(data.success) {
+        toast.success(data.message);
+        fetchOwnerBooking();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error changing booking status:", error);
+      toast.error("Error changing booking status");
+      
+    }
   }
   
   useEffect(()=>{
     fetchOwnerBooking();
   },[])
 
-  const currency= process.env.NEXT_PUBLIC_CURRENCY || "Rs.";
+ 
 
   return (
     <div className="px-4 pt-10 md:px-1- w-full">
@@ -50,7 +75,7 @@ const ManageBookingsPage = () => {
                 </span>
               </td>
               <td className=" p-3">
-                {booking.status === 'pending' ? (<select value={booking.status} className="px-2 py-1.5 mt-1 text-gray-500 border-t border-borderColor rounded-md outline-none">
+                {booking.status === 'pending' ? (<select onChange={e=>changeBookingStatus(booking._id,e.target.value)} value={booking.status} className="px-2 py-1.5 mt-1 text-gray-500 border-t border-borderColor rounded-md outline-none">
                   <option value='pending'>Pending</option>
                   <option value='cancelled'>Cancelled</option>
                   <option value='confirmed'>Confirmed</option>

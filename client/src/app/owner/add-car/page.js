@@ -1,8 +1,13 @@
 "use client"
 import { useState } from "react";
 import { assets } from "@/assets/assets"; // adjust path as needed
+import { useAppContext } from "@/context/AppContext";
+import toast from "react-hot-toast";
 
 const AddCarPage = () => {
+
+  const {axios, currency, isOwner, route} = useAppContext();
+
   const [image, setImage] = useState(null);
   const [car, setCar] = useState({
     brand: "",
@@ -11,7 +16,7 @@ const AddCarPage = () => {
     pricePerDay: "",
     category: "",
     transmission: "",
-    fuel_type: "",
+    fuelType: "",
     seating_capacity: "",
     location: "",
     description: "",
@@ -21,10 +26,42 @@ const AddCarPage = () => {
     setCar({ ...car, [e.target.name]: e.target.value });
   };
 
-  const onSubmitHandler = (e) => {
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onSubmitHandler = async(e) => {
     e.preventDefault();
-    console.log({ car, image });
-    // TODO: implement API call
+    if(isLoading) return null;
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', image);
+      formData.append('carData', JSON.stringify(car));
+      const {data} = await axios.post('api/owner/add-car', formData);
+      if(data.success) {
+        toast.success('Car added successfully');
+        setImage(null);
+        setCar({
+          brand: "",
+          model: "",
+          year: "",
+          pricePerDay: "",
+          category: "",
+          transmission: "",
+          fuelType: "",
+          seating_capacity: "",
+          location: "",
+          description: "",
+        })
+        
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error("Error adding car:", error.message);
+    }finally{
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -142,8 +179,8 @@ const AddCarPage = () => {
 
           {/* Fuel Type Dropdown */}
           <select
-            name="fuel_type"
-            value={car.fuel_type}
+            name="fuelType"
+            value={car.fuelType}
             onChange={onChangeHandler}
             className="col-span-1 border rounded p-2"
           >
@@ -192,7 +229,7 @@ const AddCarPage = () => {
             type="submit"
             className="col-span-2 bg-blue-600 text-white rounded py-2 mt-4 hover:bg-blue-700 transition"
           >
-            List Your Car
+            {isLoading ? 'Listing...' : 'List Your Car'}
           </button>
         </form>
       </div>
