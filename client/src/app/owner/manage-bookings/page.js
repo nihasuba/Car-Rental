@@ -4,6 +4,7 @@ import OwnerTitle from "@/components/ownertitle";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
+import { motion } from "framer-motion";
 
 
 const ManageBookingsPage = () => {
@@ -13,17 +14,17 @@ const ManageBookingsPage = () => {
 
   const fetchOwnerBooking = async() => {
     try {
-      const {data} = await axios.get('api/owner/bookings');
+      const {data} = await axios.get('/api/bookings/owner');
       data?.success ? setBookings(data.bookings) : toast.error(data.message);
     } catch (error) {
       console.error("Error fetching bookings:", error);
-      toast.error("Error fetching bookings");
+      toast.error(error.message);
     }
   }
 
   const changeBookingStatus = async(bookingId, status) => {
     try {
-      const {data} = await axios.post('api/owner/change-booking-status', {bookingId, status});
+      const {data} = await axios.post('/api/owner/change-status', {bookingId, status});
       if(data.success) {
         toast.success(data.message);
         fetchOwnerBooking();
@@ -44,7 +45,12 @@ const ManageBookingsPage = () => {
  
 
   return (
-    <div className="px-4 pt-10 md:px-1- w-full">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
+      className="px-4 pt-10 md:px-1- w-full"
+    >
       <OwnerTitle title="Manage bookings" subTitle=" Track All Customers bookings,approve or cancel request, and manage booking status"/>
       
       <div className='max-w-3x1 w-full rounded-md overflow-hidden border border-borderColor mt-6'>
@@ -60,7 +66,13 @@ const ManageBookingsPage = () => {
         </thead>
         <tbody>
           {bookings.map((booking, index) => (
-            <tr key={index} className="border-t border-borderColor text-gray-500">
+            <motion.tr
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.07, ease: 'easeOut' }}
+              className="border-t border-borderColor text-gray-500"
+            >
               <td className="p-3 flex items-center gap-3">
                 <Image src={booking.car.image} alt="" className="h-12 w-12 aspect-square rounded-md object-cover" />
                 <p className="font-medium max-md:hidden"> {booking.car.brand} {booking.car.model}</p>
@@ -88,13 +100,12 @@ const ManageBookingsPage = () => {
                 )}
                
               </td>
-            </tr>
+            </motion.tr>
           ))}
         </tbody>
         </table>
       </div>
-       
-    </div>
+    </motion.div>
   );
 };
 

@@ -57,17 +57,16 @@ export const getUserData = async(req,res) => {
         res.json({success:true, user})
     } catch (error) {
         console.log(error)
-        return res.json({success:false, message:error.message,error: error.stack} )
+        return res.json({success:false, message:error.message} )
     }
 }
 
 export const getCars = async(req,res) => {
     try {
-        const {user} = req;
         const cars = await Car.find({isAvailable:true})
-        res.json({success:false,cars})
+        res.json({success:true,cars})
     } catch (error) {
-        console.log(error)
-        return res.json({success:false, message:error.message,error: error.stack} )
+        console.log(error.message)
+        return res.json({success:false, message:error.message} )
     }
 }

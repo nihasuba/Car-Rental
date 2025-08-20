@@ -10,7 +10,7 @@ import { useAppContext } from "@/context/AppContext";
 
 
 
-const NavbarOwner = ({setShowLogin}) => {
+const NavbarOwner = ({}) => {
 
   const {user} = useAppContext();
 

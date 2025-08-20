@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const ManageCarsPage = () => {
-
 
   const {axios, currency, isOwner, route} = useAppContext();
   
@@ -61,7 +61,12 @@ const ManageCarsPage = () => {
   
   
   return (
-    <div className="px-4 pt-10 md:px-1- w-full">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
+      className="px-4 pt-10 md:px-1- w-full"
+    >
       <OwnerTitle title="Manage Cars" subTitle=" View All listed cars, update their details, or remove them from the booking platform"/>
       
       <div className='max-w-3x1 w-full rounded-md overflow-hidden border border-borderColor mt-6'>
@@ -77,7 +82,13 @@ const ManageCarsPage = () => {
         </thead>
         <tbody>
           {cars.map((car, index) => (
-            <tr key={index} className="border-t border-borderColor">
+            <motion.tr
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.07, ease: 'easeOut' }}
+              className="border-t border-borderColor"
+            >
               <td className="p-3 flex items-center gap-3">
                 <Image src={car.image} alt="" width={48} height={48} className="h-12 w-12 aspect-square rounded-md object-cover" />
                 <div className="max-md:hidden">
@@ -96,13 +107,12 @@ const ManageCarsPage = () => {
                 <Image  onClick= {()=>toggleAvailability(car._id)} src={car.isAvailable ? assets.eye_close_icon : assets.eye_icon} alt="" className="cursor-pointer"/>
                 <Image  onClick={()=>deleteCar(car._id)}src={assets.delete_icon} alt="" className="cursor-pointer"/>
               </td>
-            </tr>
+            </motion.tr>
           ))}
         </tbody>
         </table>
       </div>
-       
-    </div>
+    </motion.div>
   );
 };
 

@@ -2,16 +2,29 @@
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white mt-32">
+    <motion.footer
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
+      viewport={{ once: true }}
+      className="bg-gray-900 text-white mt-32"
+    >
       {/* Main Footer Content */}
       <div className="px-6 md:px-16 lg:px-24 xl:px-32 py-16">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Company Info */}
-            <div className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
               <div className="flex items-center">
                 <Image src={assets.logo} alt="Logo" className="h-8 brightness-0 invert" />
               </div>
@@ -33,10 +46,16 @@ export default function Footer() {
                   <Image src={assets.gmail_logo} alt="Gmail" className="w-6 h-6" />
                 </Link>
               </div>
-            </div>
+            </motion.div>
 
             {/* Quick Links */}
-            <div className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
               <h3 className="text-xl font-semibold">Quick Links</h3>
               <ul className="space-y-3">
                 <li>
@@ -60,10 +79,16 @@ export default function Footer() {
                   </Link>
                 </li>
               </ul>
-            </div>
+            </motion.div>
 
             {/* Services */}
-            <div className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
               <h3 className="text-xl font-semibold">Resources</h3>
               <ul className="space-y-3">
                 <li className="text-gray-300">Help Center</li>
@@ -72,10 +97,16 @@ export default function Footer() {
                 <li className="text-gray-300">Corporate Fleet</li>
                 <li className="text-gray-300">Insurance</li>
               </ul>
-            </div>
+            </motion.div>
 
             {/* Contact Info */}
-            <div className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
               <h3 className="text-xl font-semibold">Contact Us</h3>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
@@ -98,13 +129,19 @@ export default function Footer() {
                   </a>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
 
       {/* Bottom Footer */}
-      <div className="border-t border-gray-800 px-6 md:px-16 lg:px-24 xl:px-32 py-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.5, ease: 'easeOut' }}
+        viewport={{ once: true }}
+        className="border-t border-gray-800 px-6 md:px-16 lg:px-24 xl:px-32 py-6"
+      >
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-gray-400 text-sm">
@@ -123,7 +160,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-      </div>
-    </footer>
+      </motion.div>
+    </motion.footer>
   );
 }

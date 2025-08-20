@@ -2,7 +2,7 @@ import Navbar from "@/components/navbar";
 import "./globals.css";
 import ClientLayout from "@/components/clientlayout";
 import { AppProvider } from "@/context/AppContext";
-
+import MotionProvider from "@/components/motionprovider";
 
 export const metadata = {
   title: "Car Rental",
@@ -22,7 +22,9 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AppProvider>
+        <MotionProvider viewPort={{ once: true }}>
           <ClientLayout>{children}</ClientLayout>
+        </MotionProvider>
         </AppProvider>
       </body>
     </html>

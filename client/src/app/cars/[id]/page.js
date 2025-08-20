@@ -3,32 +3,64 @@ import { assets, dummyCarData } from "@/assets/assets";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import { useAppContext } from "@/context/AppContext";
+import Loader from "@/components/loader";
+import toast from "react-hot-toast";
 
 const CarDetail = () => {
   const { id } = useParams();
+  const {cars, axios, pickupDate,setPickupDate, returnDate, setReturnDate} = useAppContext()
   const route = useRouter();
   const [car, setCar] = useState(null);
 
+  const handleSubmit = async(e) =>{
+    e.preventDefault();
+    try {
+      const {data} = await axios.post('/api/bookings/create',{
+        car:id,
+        pickupDate,
+        returnDate
+      })
+      if(data.success){
+        toast.success(data.message)
+        route.push('/y-bookings')
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(data.message)
+    }
+  }
+
   useEffect(() => {
-    setCar(dummyCarData.find(car => car._id === id));
-  }, [id]);
+    setCar(cars.find(car => car._id === id));
+  }, [cars,id]);
 
   if (!car) {
     return <div>Loading...</div>;
   }
 
-  return (
+  return car ? (
     <div className="px-6 md:px-16 lg:px-24 xl:px-32 mt-16 mb-32">
-      <button 
+      <motion.button
+        initial={{ opacity: 0, x: -30 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         onClick={() => route.back()} 
         className="flex items-center gap-2 mb-6 text-gray-500 cursor-pointer"
       >
         <Image src={assets.arrow_icon} alt="" className="rotate-180 opacity-65" />
         Back to all cars
-      </button>
+      </motion.button>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-        <div className="lg:col-span-2">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="lg:col-span-2"
+        >
           <Image 
             src={car.image} 
             alt="" 
@@ -73,11 +105,16 @@ const CarDetail = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Right: Booking Form */}
-        <div className="lg:col-span-1">
-          <form className='shadow-lg h-max sticky top-18 rounded-xl p-6 space-y-6 text-gray-500'>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+          className="lg:col-span-1"
+        >
+          <form onSubmit={handleSubmit} className='shadow-lg h-max sticky top-18 rounded-xl p-6 space-y-6 text-gray-500'>
             <p className='flex items-center justify-between text-2xl text-gray-800 font-semibold'>
               $ {car.pricePerDay}
               <span className='text-base text-gray-400 font-normal'>per day</span>
@@ -92,6 +129,8 @@ const CarDetail = () => {
                 className='border border-borderColor px-3 py-2 rounded-lg' 
                 required 
                 id='pickup-date' 
+                value={pickupDate}
+                onChange={(e)=>{setPickupDate(e.target.value)}}
                 min={new Date().toISOString().split('T')[0]}
               />
             </div>
@@ -103,6 +142,8 @@ const CarDetail = () => {
                 className='border border-borderColor px-3 py-2 rounded-lg' 
                 required 
                 id='return-date'
+                value={returnDate}
+                onChange={(e)=>{setReturnDate(e.target.value)}}
               />
             </div>
 
@@ -115,10 +156,10 @@ const CarDetail = () => {
 
             <p className='text-center text-sm'>No credit card required to reserve</p>
           </form>
-        </div>
+        </motion.div>
       </div>
     </div>
-  );
+  ) : <Loader /> ;
 };
 
 export default CarDetail;

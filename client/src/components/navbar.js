@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
 import { toast } from 'react-hot-toast';
-
+import { motion } from "framer-motion";
 
 
 const Navbar = () => {
@@ -33,9 +33,15 @@ const Navbar = () => {
     }
 
   return (
-    <div className={`flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 text-gray-600 border-b border-borderColor relative transition-all ${pathname.pathname === '/' && "bg-light"}`}>
+    <motion.div 
+    initial={{ y: -20, opacity: 0 }}
+    animate={{ y: 0, opacity: 1 }}
+    transition={{ duration: 0.3 }}
+    className={`flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 text-gray-600 border-b border-borderColor relative transition-all ${pathname.pathname === '/' && "bg-light"}`}>
         <Link href="/">
-            <Image src={assets.logo} className="h-8" alt="logo"/>
+            <motion.div whileHover={{ scale: 1.05 }}>
+                <Image src={assets.logo} className="h-8" alt="logo"/>
+            </motion.div>
         </Link>
         <div className= {`max-sm:fixed max-sm:h-screen max-sm:w-full max-sm:top-16 max-sm:border-t border-borderColor right-0 flex flex-col sm:flex-row items-start
         sm:items-center gap-4 sm:gap-8 max-sm:p-4 transition-all duration-300 z-50 ${pathname.pathname === "/" ? "bg-light" : "bg-white"}, ${open? "max-sm:translate-x-0" : "max-sm:translate-x-full"}`}>
@@ -60,7 +66,7 @@ const Navbar = () => {
             <button className="sm:hidden cursor-pointer" aria-label="Menu" onClick={() =>{setOpen(!open)}}>
                 <Image src = {open ? assets.close_icon : assets.menu_icon} alt="menu" onClick={()=> setOpen(!open)} />
             </button>
-    </div>
+    </motion.div>
   )
 }
 

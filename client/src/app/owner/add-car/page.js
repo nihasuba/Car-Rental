@@ -3,6 +3,7 @@ import { useState } from "react";
 import { assets } from "@/assets/assets"; // adjust path as needed
 import { useAppContext } from "@/context/AppContext";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const AddCarPage = () => {
 
@@ -44,12 +45,12 @@ const AddCarPage = () => {
         setCar({
           brand: "",
           model: "",
-          year: "",
-          pricePerDay: "",
+          year: 0,
+          pricePerDay: 0,
           category: "",
           transmission: "",
           fuelType: "",
-          seating_capacity: "",
+          seating_capacity: 0,
           location: "",
           description: "",
         })
@@ -65,7 +66,12 @@ const AddCarPage = () => {
   };
 
   return (
-    <div className="p-6">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
+      className="p-6"
+    >
       <h1 className="text-2xl font-semibold mb-2">Add New Car</h1>
       <p className="text-gray-500 mb-8">
         Fill in details to list a new car for booking, including pricing,
@@ -233,7 +239,7 @@ const AddCarPage = () => {
           </button>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

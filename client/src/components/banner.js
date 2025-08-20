@@ -2,10 +2,15 @@
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Banner() {
   return (
-    <div className="flex flex-col mb-12 md:flex-row md:items-start items-center justify-between px-8 min-md:pl-14 bg-gradient-to-r from-[#0558FE] to-[#A9CFFF] max-w-6xl mx-3 md:mx-auto rounded-2xl overflow-hidden">
+    <motion.div 
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6,}}
+    className="flex flex-col mb-12 md:flex-row md:items-start items-center justify-between px-8 min-md:pl-14 bg-gradient-to-r from-[#0558FE] to-[#A9CFFF] max-w-6xl mx-3 md:mx-auto rounded-2xl overflow-hidden">
           <div className="space-y-8 text-white p-8">
             <div className="space-y-4 text-white">
               <h2 className="text-xl md:text-2xl font-bold ">
@@ -19,24 +24,33 @@ export default function Banner() {
               exceptional service and comfort.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-8">
+            <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6,}}className="flex flex-col sm:flex-row gap-8">
               <Link href="/cars" className="inline-flex items-center justify-center px-8 py-4 bg-primary hover:bg-primarydull text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
                 <Image src={assets.car_icon} alt="Car" className=" text-white w-5 h-5 mr-2" />
                 List Your Cars
               </Link>
-            </div>
+            </motion.div>
           </div>
           
           
             <div className="relative z-10 p-16">
-              <Image 
-                src={assets.banner_car_image} 
-                alt="Luxury Car" 
-                className="w-full h-auto"
-                priority
-              />
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+              >
+                <Image
+                  src={assets.banner_car_image}
+                  alt="Luxury Car"
+                  className="w-full h-auto"
+                  priority
+                />
+              </motion.div>
             </div>
           
-      </div>
+      </motion.div>
   );
 }
