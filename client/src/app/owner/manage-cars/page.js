@@ -21,7 +21,7 @@ const ManageCarsPage = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error("Error fetching cars:", error);
+      toast.error(error.message);
     }
   }
 
@@ -104,8 +104,8 @@ const ManageCarsPage = () => {
                 </span>
               </td>
               <td className="flex items-center p-3">
-                <Image  onClick= {()=>toggleAvailability(car._id)} src={car.isAvailable ? assets.eye_close_icon : assets.eye_icon} alt="" className="cursor-pointer"/>
-                <Image  onClick={()=>deleteCar(car._id)}src={assets.delete_icon} alt="" className="cursor-pointer"/>
+                <Image  onClick= {()=>toggleAvailability(car._id)} src={car.isAvailable ? assets.eye_close_icon : assets.eye_icon} alt="" className="cursor-pointer" />
+                <Image  onClick={()=>deleteCar(car._id)}src={assets.delete_icon} alt="" className="cursor-pointer" />
               </td>
             </motion.tr>
           ))}

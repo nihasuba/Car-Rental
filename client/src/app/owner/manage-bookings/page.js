@@ -14,7 +14,7 @@ const ManageBookingsPage = () => {
 
   const fetchOwnerBooking = async() => {
     try {
-      const {data} = await axios.get('/api/bookings/owner');
+      const {data} = await axios.get('/api/booking/owner');
       data?.success ? setBookings(data.bookings) : toast.error(data.message);
     } catch (error) {
       console.error("Error fetching bookings:", error);
@@ -74,7 +74,7 @@ const ManageBookingsPage = () => {
               className="border-t border-borderColor text-gray-500"
             >
               <td className="p-3 flex items-center gap-3">
-                <Image src={booking.car.image} alt="" className="h-12 w-12 aspect-square rounded-md object-cover" />
+                <Image src={booking.car.image} alt="" className="h-12 w-12 aspect-square rounded-md object-cover" width={48} height={48} />
                 <p className="font-medium max-md:hidden"> {booking.car.brand} {booking.car.model}</p>
               </td>
               <td className="p-3 max-md:hidden">

@@ -113,7 +113,7 @@ export default function Footer() {
                   <Image src={assets.location_icon} alt="Location" className="w-5 h-5 mt-1 brightness-0 invert opacity-70" />
                   <div>
                     <p className="text-gray-300">123 Car Street</p>
-                    <p className="text-gray-300">New York, NY 10001</p>
+                    <p className="text-gray-300">Colombo, Sri Lanka</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -124,8 +124,8 @@ export default function Footer() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-5 h-5 bg-gray-300 rounded-full opacity-70"></div>
-                  <a href="tel:+1234567890" className="text-gray-300 hover:text-white transition-colors">
-                    +1 (234) 567-890
+                  <a href="tel:+94123456789" className="text-gray-300 hover:text-white transition-colors">
+                    +94 123 456 789
                   </a>
                 </div>
               </div>

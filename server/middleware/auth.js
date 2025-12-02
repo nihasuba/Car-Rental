@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
 export const protect = async(req, res, next) => {
-    const token = req.headers.authorization;
+    const token = req.headers.authorization;   //looks for "Authorization" header
     if(!token){
         return res.json({success: false, message: "Not authorized, no token"});
     }
@@ -11,8 +11,8 @@ export const protect = async(req, res, next) => {
         if(!userId){
             return res.json({success: false, message: "Not authorized, token failed"});
         }
-        req.user = await User.findById(userId).select("-password")
-        next();
+        req.user = await User.findById(userId).select("-password") //// verify token
+        next();   // continue to actual route
     } catch (error) {
         console.error(error);
         return res.status(401).json({success: false, message: "Not authorized, token failed"});

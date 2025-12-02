@@ -50,7 +50,7 @@ export const createBooking = async (req, res) => {
         if(!isAvailable){
             return res.json({success:false, message:"Car is not Available"})
         }
-        const carData = await Car.findById({car})
+        const carData = await Car.findById(car)
         const picked = new Date(pickupDate)
         const returned = new Date(returnDate)
         const noOfDays = Math.ceil(returned-picked)/(1000*60*60*24)

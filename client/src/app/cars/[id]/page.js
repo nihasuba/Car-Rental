@@ -17,19 +17,19 @@ const CarDetail = () => {
   const handleSubmit = async(e) =>{
     e.preventDefault();
     try {
-      const {data} = await axios.post('/api/bookings/create',{
+      const {data} = await axios.post('/api/booking/create',{
         car:id,
         pickupDate,
         returnDate
       })
       if(data.success){
         toast.success(data.message)
-        route.push('/y-bookings')
+        route.push('/my-bookings')
       }else{
         toast.error(data.message)
       }
     } catch (error) {
-      toast.error(data.message)
+      toast.error(error.message)
     }
   }
 
@@ -65,6 +65,7 @@ const CarDetail = () => {
             src={car.image} 
             alt="" 
             className="w-full h-auto md:max-h-100 object-cover rounded-xl mb-6 shadow-md"
+            width={220} height={160}
           />
           <div>
             <div className="space-y-6">
@@ -75,7 +76,7 @@ const CarDetail = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
                 {icon: assets.users_icon, text: `${car.seating_capacity} Seats`},
-                {icon: assets.fuel_icon, text: car.fuel_type},
+                {icon: assets.fuel_icon, text: car.fuelType},
                 {icon: assets.car_icon, text: car.transmission},
                 {icon: assets.location_icon, text: car.location},
               ].map(({icon, text}, index) => (
@@ -114,7 +115,7 @@ const CarDetail = () => {
           transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
           className="lg:col-span-1"
         >
-          <form onSubmit={handleSubmit} className='shadow-lg h-max sticky top-18 rounded-xl p-6 space-y-6 text-gray-500'>
+          <form onSubmit={handleSubmit} method="post" className='shadow-lg h-max sticky top-18 rounded-xl p-6 space-y-6 text-gray-500'>
             <p className='flex items-center justify-between text-2xl text-gray-800 font-semibold'>
               $ {car.pricePerDay}
               <span className='text-base text-gray-400 font-normal'>per day</span>
