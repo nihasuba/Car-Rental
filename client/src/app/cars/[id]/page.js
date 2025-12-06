@@ -65,7 +65,7 @@ const CarDetail = () => {
             src={car.image} 
             alt="" 
             className="w-full h-auto md:max-h-100 object-cover rounded-xl mb-6 shadow-md"
-            width={220} height={160}
+            width={120} height={100}
           />
           <div>
             <div className="space-y-6">

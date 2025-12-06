@@ -27,7 +27,8 @@ const ManageCarsPage = () => {
 
   const toggleAvailability = async(carId) => {
     try {
-      const {data} = await axios.get('api/owner/toggle-car', {carId});
+      console.log("Toggling availability for carId:", carId);
+      const {data} = await axios.post('api/owner/toggle-car', {carId});
       if(data.success) {
         toast.success(data.message);
         fetchOwnerCars();
@@ -42,7 +43,7 @@ const ManageCarsPage = () => {
     try {
       const confirm = window.confirm("Are you sure you want to delete this car?");
       if(!confirm) return null;
-      const {data} = await axios.get('api/owner/delete-car', {carId});
+      const {data} = await axios.post('api/owner/delete-car', {carId});
       if(data.success) {
         toast.success(data.message);
         fetchOwnerCars();

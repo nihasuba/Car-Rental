@@ -15,7 +15,9 @@ const MyBookings = () => {
       try {
           const {data} = await axios.get('/api/booking/user')
           if(data.success){
-            setBookings(data.bookings)
+            // Filter out bookings where car is null (deleted cars)
+            const validBookings = data.bookings.filter(booking => booking.car !== null);
+            setBookings(validBookings)
           }else{
              toast.error(data.message)
           }
@@ -48,7 +50,7 @@ const MyBookings = () => {
             {/* Car Info - left */}
             <div className="min-w-[220px] md:w-[220px] flex-shrink-0">
               <div className="rounded-md overflow-hidden mb-3">
-                <Image src = {booking.car.image} alt="" width={220} height={160} className="w-full h-auto"/>
+                <Image src = {booking.car.image} alt="" width={220} height={100} className="w-full h-auto"/>
               </div>
               <p className="text-lg font-medium mt-2">{booking.car.brand} {booking.car.model}</p>
               <p className="text-gray-500 text-sm">{booking.car.year} • {booking.car.category} • {booking.car.location}</p>

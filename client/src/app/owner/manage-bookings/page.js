@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 
 const ManageBookingsPage = () => {

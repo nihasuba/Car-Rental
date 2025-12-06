@@ -4,18 +4,18 @@ import User from '../models/User.js';
 export const protect = async(req, res, next) => {
     const token = req.headers.authorization;   //looks for "Authorization" header
     if(!token){
-        return res.json({success: false, message: "Not authorized, no token"});
+        return res.json({success: false, message: " No User Found , no token"});
     }
     try {
         const userId = jwt.decode(token,process.env.JWT_SECRET);
         if(!userId){
-            return res.json({success: false, message: "Not authorized, token failed"});
+            return res.json({success: false, message: "No User Found Not authorized, token failed"});
         }
         req.user = await User.findById(userId).select("-password") //// verify token
         next();   // continue to actual route
     } catch (error) {
         console.error(error);
-        return res.status(401).json({success: false, message: "Not authorized, token failed"});
+        return res.status(401).json({success: false, message: "No User Found Not authorized, token failed"});
         
     }
 }

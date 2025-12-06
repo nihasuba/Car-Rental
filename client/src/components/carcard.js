@@ -34,7 +34,7 @@ const CarCard = ({car}) => {
                 </div>
                 <div className="flex items-center text-sm text-muted-foreground">
                     <Image src={assets.fuel_icon} alt="" className='h-4 mr-2' />
-                    <span>{car.fuel_type}</span>
+                    <span>{car.fuelType}</span>
                 </div>
                 <div className="flex items-center text-sm text-muted-foreground">
                     <Image src={assets.car_icon} alt="" className='h-4 mr-2' />

@@ -55,7 +55,7 @@ export default function Hero() {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
             >
-                <Image src={assets.search_icon} alt="Search" className="brightness-300"/>
+                <Image src={assets.search_icon} alt="Search" className="brightness-300 "/>
             </motion.div>
             Search
           </motion.button>

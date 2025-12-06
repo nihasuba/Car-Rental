@@ -59,7 +59,7 @@ export const createBooking = async (req, res) => {
         res.json({ success: true, message: "Car booked successfully" });
     } catch (error) {
         console.log(error);
-        return res.json({ success: false, message: error.message, error: error.stack });
+        return res.json({ success: false, message: "No User Found ", error: error.stack });
         
     }
 }
